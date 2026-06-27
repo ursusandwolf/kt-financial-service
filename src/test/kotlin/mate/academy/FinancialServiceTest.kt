@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 
 class FinancialServiceTest {
 
@@ -40,8 +39,9 @@ class FinancialServiceTest {
         val invalidSource = "12345" // Not matching the required format
 
         // when & then
-        val executable = Executable { AccountNumber(invalidSource) }
-        assertThrows(IllegalArgumentException::class.java, executable)
+        assertThrows(IllegalArgumentException::class.java) {
+            AccountNumber(invalidSource)
+        }
     }
 
     @Test
@@ -50,8 +50,9 @@ class FinancialServiceTest {
         val invalidDestination = "12345" // Not matching the required format
 
         // when & then
-        val executable = Executable { AccountNumber(invalidDestination) }
-        assertThrows(IllegalArgumentException::class.java, executable)
+        assertThrows(IllegalArgumentException::class.java) {
+            AccountNumber(invalidDestination)
+        }
     }
 
     @Test
@@ -60,8 +61,9 @@ class FinancialServiceTest {
         val negativeAmount = -100.0
 
         // when & then
-        val executable = Executable { CurrencyAmount(negativeAmount) }
-        assertThrows(IllegalArgumentException::class.java, executable)
+        assertThrows(IllegalArgumentException::class.java) {
+            CurrencyAmount(negativeAmount)
+        }
     }
 
     @Test
@@ -70,8 +72,9 @@ class FinancialServiceTest {
         val invalidCurrencyCode = "US" // Not matching the required format
 
         // when & then
-        val executable = Executable { CurrencyCode(invalidCurrencyCode) }
-        assertThrows(IllegalArgumentException::class.java, executable)
+        assertThrows(IllegalArgumentException::class.java) {
+            CurrencyCode(invalidCurrencyCode)
+        }
     }
 
     @Test
@@ -80,8 +83,9 @@ class FinancialServiceTest {
         val emptyTransactionId = "" // Not matching the required format
 
         // when & then
-        val executable = Executable { TransactionId(emptyTransactionId) }
-        assertThrows(IllegalArgumentException::class.java, executable)
+        assertThrows(IllegalArgumentException::class.java) {
+            TransactionId(emptyTransactionId)
+        }
     }
 
     @Test
@@ -127,10 +131,9 @@ class FinancialServiceTest {
         val invalidFromCurrency = "US" // Not matching the required format
 
         // when & then
-        val executable = Executable {
+        assertThrows(IllegalArgumentException::class.java) {
             CurrencyCode(invalidFromCurrency)
         }
-        assertThrows(IllegalArgumentException::class.java, executable)
     }
 
     @Test
@@ -139,10 +142,9 @@ class FinancialServiceTest {
         val invalidToCurrency = "EU" // Not matching the required format
 
         // when & then
-        val executable = Executable {
+        assertThrows(IllegalArgumentException::class.java) {
             CurrencyCode(invalidToCurrency)
         }
-        assertThrows(IllegalArgumentException::class.java, executable)
     }
 
     @Test
@@ -151,10 +153,9 @@ class FinancialServiceTest {
         val negativeAmount = -100.0
 
         // when & then
-        val executable = Executable {
+        assertThrows(IllegalArgumentException::class.java) {
             CurrencyAmount(negativeAmount)
         }
-        assertThrows(IllegalArgumentException::class.java, executable)
     }
 
     @Test
@@ -207,7 +208,7 @@ class FinancialServiceTest {
 
     @Test
     fun currencyAmount_NegativeAmount_ThrowsException() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             CurrencyAmount(-100.0)
         }
     }
@@ -227,13 +228,13 @@ class FinancialServiceTest {
 
     @Test
     fun currencyCode_InvalidCode_ThrowsException() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             CurrencyCode("usd")
         } // not uppercase
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             CurrencyCode("EU")
         } // not 3 letters
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             CurrencyCode("EURO")
         } // more than 3 letters
     }
@@ -248,13 +249,13 @@ class FinancialServiceTest {
 
     @Test
     fun accountNumber_InvalidNumberFormat_ThrowsException() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             AccountNumber("123456789")
         } // less than 10 digits
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             AccountNumber("12345678901")
         } // more than 10 digits
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             AccountNumber("12345abcde")
         } // contains letters
     }
@@ -269,7 +270,7 @@ class FinancialServiceTest {
 
     @Test
     fun transactionId_EmptyId_ThrowsException() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             TransactionId("")
         }
     }
