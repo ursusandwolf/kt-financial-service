@@ -8,7 +8,9 @@ class FinancialService {
         currencyCode: CurrencyCode,
         transactionId: TransactionId
     ) : String {
-        // TODO: implement
+        return "Transferred ${amount.amount} ${currencyCode.code} " +
+                "from ${source.id} to ${destination.id}. " +
+                "Transaction ID: ${transactionId.id}"
     }
 
     fun convertCurrency(
@@ -16,7 +18,8 @@ class FinancialService {
         fromCurrency: CurrencyCode,
         toCurrency: CurrencyCode
     ): CurrencyAmount {
-        // TODO: implement
+        val exchangeRate = getExchangeRate(fromCurrency, toCurrency)
+        return CurrencyAmount(amount.amount * exchangeRate)
     }
 
     private fun getExchangeRate(fromCurrency: CurrencyCode, toCurrency: CurrencyCode): Double {
@@ -26,5 +29,34 @@ class FinancialService {
             fromCurrency.code == "USD" && toCurrency.code == "GBP" -> 0.82
             else -> 1.0
         }
+    }
+}
+
+@JvmInline
+value class AccountNumber(val id: String) {
+    init {
+        require(id.matches(Regex("\\d{10}"))) { "Account number must contain exactly 10 digits" }
+    }
+}
+
+@JvmInline
+value class CurrencyAmount(val amount: Double) {
+    init {
+        require(amount >= 0) { "Currency amount must be non-negative" }
+    }
+}
+
+@JvmInline
+value class CurrencyCode(val code: String) {
+    init {
+        require(code.matches(Regex("[A-Z]{3}"))) {
+            "Currency code must be exactly 3 uppercase letters" }
+    }
+}
+
+@JvmInline
+value class TransactionId(val id: String) {
+    init {
+        require(id.isNotBlank()) { "Transaction ID must not be empty" }
     }
 }
