@@ -1,8 +1,9 @@
 package mate.academy
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.function.Executable
 
 class FinancialServiceTest {
@@ -17,12 +18,20 @@ class FinancialServiceTest {
         val amount = CurrencyAmount(100.0)
         val currencyCode = CurrencyCode("USD")
         val transactionId = TransactionId("txn123")
+        val expected =
+            "Transferred 100.0 USD from 1234567890 to 0987654321. Transaction ID: txn123"
 
         // when
-        val result = financialService.transferFunds(source, destination, amount, currencyCode, transactionId)
+        val result = financialService.transferFunds(
+            source,
+            destination,
+            amount,
+            currencyCode,
+            transactionId
+        )
 
         // then
-        assertEquals("Transferred 100.0 USD from 1234567890 to 0987654321. Transaction ID: txn123", result)
+        assertEquals(expected, result)
     }
 
     @Test
@@ -82,6 +91,8 @@ class FinancialServiceTest {
         val amount = CurrencyAmount(100.0)
         val currencyCode = CurrencyCode("USD")
         val transactionId = TransactionId("txn123")
+        val expected =
+            "Transferred 100.0 USD from 1234567890 to 1234567890. Transaction ID: txn123"
 
         // when
         val result = financialService.transferFunds(
@@ -93,7 +104,7 @@ class FinancialServiceTest {
         )
 
         // then
-        assertEquals("Transferred 100.0 USD from 1234567890 to 1234567890. Transaction ID: txn123", result)
+        assertEquals(expected, result)
     }
 
     @Test
@@ -116,7 +127,9 @@ class FinancialServiceTest {
         val invalidFromCurrency = "US" // Not matching the required format
 
         // when & then
-        val executable = Executable { CurrencyCode(invalidFromCurrency) }
+        val executable = Executable {
+            CurrencyCode(invalidFromCurrency)
+        }
         assertThrows(IllegalArgumentException::class.java, executable)
     }
 
@@ -126,7 +139,9 @@ class FinancialServiceTest {
         val invalidToCurrency = "EU" // Not matching the required format
 
         // when & then
-        val executable = Executable { CurrencyCode(invalidToCurrency) }
+        val executable = Executable {
+            CurrencyCode(invalidToCurrency)
+        }
         assertThrows(IllegalArgumentException::class.java, executable)
     }
 
@@ -136,7 +151,9 @@ class FinancialServiceTest {
         val negativeAmount = -100.0
 
         // when & then
-        val executable = Executable { CurrencyAmount(negativeAmount) }
+        val executable = Executable {
+            CurrencyAmount(negativeAmount)
+        }
         assertThrows(IllegalArgumentException::class.java, executable)
     }
 
@@ -190,7 +207,9 @@ class FinancialServiceTest {
 
     @Test
     fun currencyAmount_NegativeAmount_ThrowsException() {
-        assertThrows<IllegalArgumentException> { CurrencyAmount(-100.0) }
+        assertThrows<IllegalArgumentException> {
+            CurrencyAmount(-100.0)
+        }
     }
 
     @Test
@@ -201,37 +220,57 @@ class FinancialServiceTest {
     // Tests for CurrencyCode
     @Test
     fun currencyCode_ValidCode_Success() {
-        assertDoesNotThrow { CurrencyCode("USD") }
+        assertDoesNotThrow {
+            CurrencyCode("USD")
+        }
     }
 
     @Test
     fun currencyCode_InvalidCode_ThrowsException() {
-        assertThrows<IllegalArgumentException> { CurrencyCode("usd") } // not uppercase
-        assertThrows<IllegalArgumentException> { CurrencyCode("EU") }  // not 3 letters
-        assertThrows<IllegalArgumentException> { CurrencyCode("EURO") } // more than 3 letters
+        assertThrows<IllegalArgumentException> {
+            CurrencyCode("usd")
+        } // not uppercase
+        assertThrows<IllegalArgumentException> {
+            CurrencyCode("EU")
+        } // not 3 letters
+        assertThrows<IllegalArgumentException> {
+            CurrencyCode("EURO")
+        } // more than 3 letters
     }
 
     // Tests for AccountNumber
     @Test
     fun accountNumber_ValidNumber_Success() {
-        assertDoesNotThrow { AccountNumber("1234567890") }
+        assertDoesNotThrow {
+            AccountNumber("1234567890")
+        }
     }
 
     @Test
     fun accountNumber_InvalidNumberFormat_ThrowsException() {
-        assertThrows<IllegalArgumentException> { AccountNumber("123456789") }  // less than 10 digits
-        assertThrows<IllegalArgumentException> { AccountNumber("12345678901") } // more than 10 digits
-        assertThrows<IllegalArgumentException> { AccountNumber("12345abcde") }  // contains letters
+        assertThrows<IllegalArgumentException> {
+            AccountNumber("123456789")
+        } // less than 10 digits
+        assertThrows<IllegalArgumentException> {
+            AccountNumber("12345678901")
+        } // more than 10 digits
+        assertThrows<IllegalArgumentException> {
+            AccountNumber("12345abcde")
+        } // contains letters
     }
 
     // Tests for TransactionId
     @Test
     fun transactionId_ValidId_Success() {
-        assertDoesNotThrow { TransactionId("txn123") }
+        assertDoesNotThrow {
+            TransactionId("txn123")
+        }
     }
 
     @Test
     fun transactionId_EmptyId_ThrowsException() {
-        assertThrows<IllegalArgumentException> { TransactionId("") }
+        assertThrows<IllegalArgumentException> {
+            TransactionId("")
+        }
     }
 }

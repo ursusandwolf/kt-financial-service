@@ -15,8 +15,8 @@ class FinancialService {
         transactionId: TransactionId
     ) : String {
         return "Transferred ${amount.amount} ${currencyCode.code} " +
-                "from ${source.id} to ${destination.id}. " +
-                "Transaction ID: ${transactionId.id}"
+            "from ${source.id} to ${destination.id}. " +
+            "Transaction ID: ${transactionId.id}"
     }
 
     fun convertCurrency(
@@ -56,7 +56,8 @@ value class CurrencyAmount(val amount: Double) {
 value class CurrencyCode(val code: String) {
     init {
         require(code.matches(Regex("[A-Z]{3}"))) {
-            "Currency code must be exactly 3 uppercase letters" }
+            "Currency code must be exactly 3 uppercase letters"
+        }
     }
 }
 
